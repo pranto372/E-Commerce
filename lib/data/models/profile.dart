@@ -1,30 +1,4 @@
 class Profile {
-  String? msg;
-  List<Data>? data;
-
-  Profile({this.msg, this.data});
-
-  Profile.fromJson(Map<String, dynamic> json) {
-    msg = json['msg'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['msg'] = msg;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Data {
   int? id;
   String? firstName;
   String? lastName;
@@ -35,7 +9,7 @@ class Data {
   String? createdAt;
   String? updatedAt;
 
-  Data(
+  Profile(
       {this.id,
         this.firstName,
         this.lastName,
@@ -46,7 +20,7 @@ class Data {
         this.createdAt,
         this.updatedAt});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Profile.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstName = json['firstName'];
     lastName = json['lastName'];

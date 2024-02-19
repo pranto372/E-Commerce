@@ -1,4 +1,5 @@
 import 'package:crafty_bay/data/models/product_model.dart';
+import 'package:crafty_bay/presentation/state_holders/create_wish_list_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/product_details_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -82,9 +83,16 @@ class ProductItemCard extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4)
                           ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(2.0),
-                            child: Icon(Icons.favorite_outline_rounded, size: 12,color: Colors.white,),
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: InkWell(
+                              onTap: (){},
+                              child: const Icon(
+                                Icons.favorite_outline_rounded,
+                                size: 12,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         )
                       ],
