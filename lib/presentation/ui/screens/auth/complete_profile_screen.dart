@@ -99,7 +99,6 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 ),
                 TextFormField(
                   controller: _cusCityTEController,
-                  keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(hintText: 'City'),
                   validator: (value){
