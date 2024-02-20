@@ -1,5 +1,6 @@
 import 'package:crafty_bay/data/models/product_model.dart';
 import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/brand_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/category_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/home_banner_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_controller.dart';
@@ -7,8 +8,10 @@ import 'package:crafty_bay/presentation/state_holders/new_product_controller.dar
 import 'package:crafty_bay/presentation/state_holders/popular_product_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/special_product_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/auth/verify_email_screen.dart';
+import 'package:crafty_bay/presentation/ui/screens/brand_screen.dart';
 import 'package:crafty_bay/presentation/ui/screens/product_list_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/assets_path.dart';
+import 'package:crafty_bay/presentation/ui/widgets/category_brand_item.dart';
 import 'package:crafty_bay/presentation/ui/widgets/center_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/ui/widgets/home/banner_carousel.dart';
 import 'package:crafty_bay/presentation/ui/widgets/category_item.dart';
@@ -60,6 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               categoryList,
+              const SizedBox(height: 8),
+              SectionTitle(
+                title: 'All Brand',
+                onTapSeeAll: () {
+                  Get.to(const BrandScreen());
+                },
+              ),
+              brandList,
+              const SizedBox(height: 16,),
               SectionTitle(
                 title: "Popular",
                 onTapSeeAll: (){
@@ -112,6 +124,35 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+
+  SizedBox get brandList {
+    return SizedBox(
+      height: 100,
+      child: GetBuilder<BrandListController>(builder: (brandListController) {
+        return Visibility(
+          visible: brandListController.inProgress == false,
+          replacement: const CenterCircularProgressIndicator(),
+          child: ListView.separated(
+            primary: false,
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: brandListController.brandListModel.brandListItem?.length ?? 0,
+            itemBuilder: (context, index) {
+              return CategoryBrandItem(
+                brandListItem: brandListController.brandListModel.brandListItem![index],
+              );
+            },
+            separatorBuilder: (_, __) {
+              return const SizedBox(
+                width: 12,
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 

@@ -26,19 +26,6 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   ValueNotifier<int> noOfItems = ValueNotifier(1);
-  List<Color> colors = [
-    Colors.black54,
-    Colors.blueGrey,
-    AppColors.primaryColor,
-    Colors.brown,
-    Colors.black,
-  ];
-  List<String> sizes = [
-    'S',
-    'M',
-    'L',
-    'XL',
-  ];
 
   Color? _selectedColor;
   String? _selectedSize;
@@ -60,34 +47,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       ),
       body: GetBuilder<ProductDetailsController>(
           builder: (productDetailsController) {
-        return Visibility(
-          visible: productDetailsController.inProgress == false,
-          replacement: const CenterCircularProgressIndicator(),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ProductImageCarousel(
-                        urls: [
-                          productDetailsController.productDetails.img1 ?? '',
-                          productDetailsController.productDetails.img2 ?? '',
-                          productDetailsController.productDetails.img3 ?? '',
-                          productDetailsController.productDetails.img4 ?? '',
+            return Visibility(
+              visible: productDetailsController.inProgress == false,
+              replacement: const CenterCircularProgressIndicator(),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ProductImageCarousel(
+                            urls: [
+                              productDetailsController.productDetails?.img1 ?? '',
+                              productDetailsController.productDetails?.img2 ?? '',
+                              productDetailsController.productDetails?.img3 ?? '',
+                              productDetailsController.productDetails?.img4 ?? '',
+                            ],
+                          ),
+                          productDetailsBody(
+                              productDetailsController.productDetails!)
                         ],
                       ),
-                      productDetailsBody(
-                          productDetailsController.productDetails)
-                    ],
+                    ),
                   ),
-                ),
+                  priceAndAddToCartSection
+                ],
               ),
-              priceAndAddToCartSection
-            ],
-          ),
-        );
-      }),
+            );
+          }),
     );
   }
 
@@ -124,9 +111,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
           ColorSelector(
               colors: productDetails.color
-                      ?.split(',')
-                      .map((e) => getColorFromString(e))
-                      .toList() ??
+                  ?.split(',')
+                  .map((e) => getColorFromString(e))
+                  .toList() ??
                   [],
               onChange: (selectedColor) {
                 _selectedColor = selectedColor;
@@ -212,7 +199,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         InkWell(
           onTap: () {
-            Get.to(()=> ReviewsScreen(productId: widget.productId.toString(),));
+            Get.to(() => ReviewsScreen(
+              productId: widget.productId.toString(),
+            ));
           },
           child: const Text(
             "Reviews",
@@ -231,37 +220,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: GetBuilder<CreateWishListController>(
-              builder: (createWishListController) {
-                return InkWell(
-                  onTap: () async {
-                    final bool response = await Get.find<CreateWishListController>().createWishList(widget.productId);
-                    if(response == true){
-                      Get.showSnackbar(
-                        const GetSnackBar(
-                          title: 'Success',
-                          message: 'This Product has been added to wish list',
-                          duration: Duration(seconds: 2),
-                          isDismissible: true,
-                        )
-                      );
-                    }else{
-                      Get.showSnackbar(
-                          const GetSnackBar(
+                builder: (createWishListController) {
+                  return InkWell(
+                      onTap: () async {
+                        final bool response =
+                        await Get.find<CreateWishListController>()
+                            .createWishList(widget.productId);
+                        if (response == true) {
+                          Get.showSnackbar(const GetSnackBar(
+                            title: 'Success',
+                            message: 'This Product has been added to wish list',
+                            duration: Duration(seconds: 2),
+                            isDismissible: true,
+                          ));
+                        } else {
+                          Get.showSnackbar(const GetSnackBar(
                             title: 'Failed',
                             message: 'Something went wrong',
                             duration: Duration(seconds: 2),
                             isDismissible: true,
-                          )
-                      );
-                    }
-                  },
-                  child: const Icon(
-                  Icons.favorite_outline_rounded,
-                  size: 12,
-                  color: Colors.white,
-                ));
-              }
-            ),
+                          ));
+                        }
+                      },
+                      child: const Icon(
+                        Icons.favorite_outline_rounded,
+                        size: 12,
+                        color: Colors.white,
+                      ));
+                }),
           ),
         )
       ],
@@ -300,7 +286,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           SizedBox(
             width: 110,
             child:
-                GetBuilder<AddToCartController>(builder: (addToCartController) {
+            GetBuilder<AddToCartController>(builder: (addToCartController) {
               return Visibility(
                 visible: addToCartController.inProgress == false,
                 replacement: const CenterCircularProgressIndicator(),

@@ -1,11 +1,12 @@
 import 'package:crafty_bay/data/models/product_model.dart';
 import 'package:crafty_bay/presentation/state_holders/create_wish_list_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/product_wish_list_controller.dart';
 import 'package:crafty_bay/presentation/ui/screens/product_details_screen.dart';
 import 'package:crafty_bay/presentation/ui/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductItemCard extends StatelessWidget {
+class ProductItemCard extends StatefulWidget {
   const ProductItemCard({
     super.key, required this.product,
   });
@@ -13,10 +14,41 @@ class ProductItemCard extends StatelessWidget {
   final ProductModel product;
 
   @override
+  State<ProductItemCard> createState() => _ProductItemCardState();
+}
+
+class _ProductItemCardState extends State<ProductItemCard> {
+  @override
   Widget build(BuildContext context) {
     return InkWell(
+      onLongPress: (){
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Alert!'),
+              content: const Text('Do you want to delete this product.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text('Cancel', style: TextStyle(color: Colors.grey),),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.find<ProductWishListController>().removeWishListProduct(widget.product.id ?? 0);
+                    Get.back();
+                  },
+                  child: const Text('Delete'),
+                ),
+              ],
+            );
+          },
+        );
+      },
       onTap: (){
-        Get.to(()=> ProductDetailsScreen(productId: product.id!,));
+        Get.to(()=> ProductDetailsScreen(productId: widget.product.id!,));
       },
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
@@ -35,7 +67,7 @@ class ProductItemCard extends StatelessWidget {
                     topRight: Radius.circular(16),
                   ),
                   child: Image.network(
-                    product.image ?? '',
+                    widget.product.image ?? '',
                     width: 160,
                     height: 120,
                     fit: BoxFit.scaleDown,
@@ -46,7 +78,7 @@ class ProductItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product.title ?? '',
+                      widget.product.title ?? '',
                       maxLines: 1,
                       style: const TextStyle(
                           fontSize: 12,
@@ -57,7 +89,7 @@ class ProductItemCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "৳${product.price ?? 0}",
+                          "৳${widget.product.price ?? 0}",
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -69,7 +101,7 @@ class ProductItemCard extends StatelessWidget {
                           children: [
                             const Icon(Icons.star, color: Colors.amber,size: 16,),
                             Text(
-                              '${product.star ?? 0}',
+                              '${widget.product.star ?? 0}',
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,

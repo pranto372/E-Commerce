@@ -22,30 +22,43 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   final TextEditingController _otpTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  int seconds = 120;
-  late Timer _timer;
+
+  int countdown = 60;
+  bool buttonEnabled = false;
+  late Timer timer;
 
   @override
   void initState() {
     super.initState();
-    startTimer();
+    startCountdown();
   }
 
-  void startTimer() {
-    const oneSec = const Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-          (Timer timer) {
-        if (seconds == 0) {
+  void startCountdown() {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        countdown -= 1;
+      });
+      if (countdown <= 0) {
+        setState(() {
+          buttonEnabled = true;
           timer.cancel();
-          // You can add code to execute when the timer reaches zero
-        } else {
-          setState(() {
-            seconds--;
-          });
-        }
-      },
-    );
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  void countStart() {
+    if (countdown == 0) {
+      setState(() {
+        buttonEnabled = false;
+      });
+    }
   }
 
   @override
@@ -143,27 +156,36 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   ),
                 ),
                 const SizedBox(height: 24,),
-                RichText(text: TextSpan(
-                    style: const TextStyle(
-                      color: Colors.grey,
-                    ),
-                  children: [
-                    const TextSpan(
-                      text: 'This code will expire '
-                    ),
-                    TextSpan(
-                      text: '$seconds' + 's',
+                RichText(
+                  text: TextSpan(
+                    style: const TextStyle(color: Colors.grey),
+                    children: [
+                      const TextSpan(
+                        text: 'This code will expire',
+                      ),
+                      TextSpan(
+                        text: ' $countdown s',
                         style: const TextStyle(
                           color: AppColors.primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: buttonEnabled
+                      ? () {
+                    countStart();
+                  }
+                      : null,
+                  child: Text(
+                    'Resend Code',
+                    style: TextStyle(
+                      color: buttonEnabled ? Colors.blue : Colors.grey,
                     ),
-                    ),
-                  ]
-                )),
-                TextButton(onPressed: (){}, child: const Text('Resend Code',
-                style: TextStyle(color: Colors.grey),
-                ))
+                  ),
+                ),
               ],
             ),
           ),

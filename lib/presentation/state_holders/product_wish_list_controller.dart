@@ -38,4 +38,21 @@ class ProductWishListController extends GetxController{
     update();
     return isSuccess;
   }
+
+  Future<bool> removeWishListProduct(int id) async {
+    bool isSuccess = false;
+    _inProgress = true;
+    update();
+    final ResponseData response = await NetworkCaller().getRequest(Urls.removeWishList(id));
+    _inProgress = false;
+    if(response.isSuccess){
+      _productWishListModel.data?.removeWhere((element) => element.productId == id);
+      isSuccess = true;
+      update();
+    }else{
+      _errorMessage = response.errorMessage;
+    }
+    update();
+    return isSuccess;
+  }
 }

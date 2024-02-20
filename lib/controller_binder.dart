@@ -1,6 +1,7 @@
 
 import 'package:crafty_bay/presentation/state_holders/add_to_cart_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/auth_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/brand_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/cart_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/category_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/complete_profile_controller.dart';
@@ -15,7 +16,6 @@ import 'package:crafty_bay/presentation/state_holders/product_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_details_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_wish_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/read_profile_data_controller.dart';
-import 'package:crafty_bay/presentation/state_holders/remove_wish_list_product_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/review_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/send_email_otp_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/special_product_controller.dart';
@@ -45,6 +45,6 @@ class ControllerBinder extends Bindings{
     Get.put(ProductWishListController());
     Get.put(ReviewListController());
     Get.put(CreateProductReviewController());
-    Get.put(RemoveWishListProductController());
+    Get.put(BrandListController());
   }
 }

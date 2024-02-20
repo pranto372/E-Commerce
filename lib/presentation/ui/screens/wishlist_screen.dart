@@ -53,20 +53,24 @@ class _WishListScreenState extends State<WishListScreen> {
                 return Visibility(
                   visible: productWishListController.inProgress == false,
                   replacement: const CenterCircularProgressIndicator(),
-                  child: GridView.builder(
-                      itemCount: productWishListController.productWishListModel.data?.length ?? 0,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 0.90,
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 4
-                      ),
-                      itemBuilder: (context, index){
-                      return FittedBox(
-                          child: ProductItemCard(
-                              product: productWishListController
-                                  .productWishListModel.data![index].product!));
-                    }
+                  child: Visibility(
+                    visible: productWishListController.productWishListModel.data?.isNotEmpty ?? false,
+                    replacement: const Center(child: Text("Products not available."),),
+                    child: GridView.builder(
+                        itemCount: productWishListController.productWishListModel.data?.length ?? 0,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 0.90,
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 4
+                        ),
+                        itemBuilder: (context, index){
+                        return FittedBox(
+                            child: ProductItemCard(
+                                product: productWishListController
+                                    .productWishListModel.data![index].product!));
+                      }
+                    ),
                   ),
                 );
               }
